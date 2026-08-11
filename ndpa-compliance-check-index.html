@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NDPA Compliance Self-Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0A0A0A;
+  --near-black: #141414;
+  --card: #1A1A1A;
+  --card-border: #2A2A2A;
+  --off-white: #F4F4F4;
+  --grey: #A8A8A8;
+  --red: #FF4B2B;
+  --red-dim: #C93A20;
+  --white: #FFFFFF;
+  --green: #3DDC84;
+  --amber: #FFB020;
+  --orange: #FF8A3D;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--black);
+  color: var(--off-white);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrap { width: 100%; max-width: 640px; padding: 32px 24px 64px; flex: 1; display: flex; flex-direction: column; }
+.eyebrow {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+.subtitle { color: var(--grey); font-size: 16px; line-height: 1.6; margin-bottom: 32px; }
+.screen { display: none; flex: 1; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* Landing */
+#landing { justify-content: center; }
+.stat-row { display: flex; gap: 24px; margin: 28px 0 36px; flex-wrap: wrap; }
+.stat { flex: 1; min-width: 140px; }
+.stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--white); }
+.stat-label { font-size: 13px; color: var(--grey); margin-top: 4px; }
+.btn-primary {
+  background: var(--red);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  padding: 16px 28px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+  width: 100%;
+}
+.btn-primary:hover { background: var(--red-dim); }
+.btn-primary:active { transform: scale(0.98); }
+.disclaimer { font-size: 12px; color: var(--grey); margin-top: 16px; text-align: center; }
+
+/* Question flow */
+.progress-track {
+  height: 4px;
+  background: var(--card-border);
+  border-radius: 2px;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--red);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: 10%;
+}
+.q-counter {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  color: var(--grey);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+.q-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+.q-help { color: var(--grey); font-size: 14px; line-height: 1.55; margin-bottom: 28px; }
+.options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.option {
+  background: var(--card);
+  border: 1.5px solid var(--card-border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  font-size: 15px;
+  font-weight: 500;
+}
+.option:hover { border-color: var(--grey); }
+.option.selected { border-color: var(--red); background: rgba(255,75,43,0.08); }
+.nav-row { display: flex; gap: 12px; margin-top: auto; }
+.btn-back {
+  background: transparent;
+  color: var(--grey);
+  border: 1.5px solid var(--card-border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+}
+.btn-back:hover { border-color: var(--grey); color: var(--off-white); }
+
+/* Results */
+#results { justify-content: flex-start; }
+.score-block { text-align: center; padding: 40px 0 32px; }
+.score-ring {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.score-ring svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
+.score-num { font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 700; z-index: 1; }
+.band-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.band-sub { color: var(--grey); font-size: 14px; }
+.cat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--card-border);
+}
+.cat-name { font-size: 16px; font-weight: 500; }
+.cat-tag {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+.tag-strong { background: rgba(61,220,132,0.12); color: var(--green); }
+.tag-needs { background: rgba(255,176,32,0.12); color: var(--amber); }
+.tag-critical { background: rgba(255,75,43,0.12); color: var(--red); }
+.interpretation {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 22px;
+  margin: 28px 0 24px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--off-white);
+}
+.cta-block { text-align: center; }
+.retake-link {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  color: var(--grey);
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--grey);
+  padding: 20px 24px 32px;
+}
+footer a { color: var(--grey); }
+
+@media (max-width: 480px) {
+  h1 { font-size: 28px; }
+  .q-text { font-size: 19px; }
+  .stat-row { gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- LANDING -->
+  <section id="landing" class="screen active">
+    <div class="eyebrow">TrustGrid · Compliance Check</div>
+    <h1>Is your business actually NDPA compliant, or just assuming it is?</h1>
+    <p class="subtitle">A free 10-question self-assessment covering the core obligations under Nigeria's Data Protection Act 2023. Takes about four minutes. Get a risk score and a breakdown of exactly where your gaps are.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">10</div><div class="stat-label">Questions</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Risk categories</div></div>
+      <div class="stat"><div class="stat-num">~4 min</div><div class="stat-label">To complete</div></div>
+    </div>
+    <button class="btn-primary" onclick="startAssessment()">Start the assessment</button>
+    <p class="disclaimer">Educational tool. Not a substitute for a formal compliance audit.</p>
+  </section>
+
+  <!-- QUESTIONS -->
+  <section id="question-screen" class="screen">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="q-counter" id="qCounter">QUESTION 1 OF 10</div>
+    <div class="q-text" id="qText"></div>
+    <div class="q-help" id="qHelp"></div>
+    <div class="options" id="qOptions"></div>
+    <div class="nav-row">
+      <button class="btn-back" id="backBtn" onclick="goBack()">Back</button>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen">
+    <div class="score-block">
+      <div class="score-ring" id="scoreRing">
+        <svg width="160" height="160">
+          <circle cx="80" cy="80" r="70" stroke="#2A2A2A" stroke-width="10" fill="none"></circle>
+          <circle id="scoreArc" cx="80" cy="80" r="70" stroke="#FF4B2B" stroke-width="10" fill="none" stroke-linecap="round"></circle>
+        </svg>
+        <div class="score-num" id="scoreNum">0</div>
+      </div>
+      <div class="band-label" id="bandLabel">—</div>
+      <div class="band-sub" id="bandSub">0% compliance score</div>
+    </div>
+
+    <div id="catList"></div>
+
+    <div class="interpretation" id="interpretation"></div>
+
+    <div class="cta-block">
+      <a href="https://olamidelatifat.com/blog" style="text-decoration:none;">
+        <button class="btn-primary">Talk to TrustGrid about your gaps →</button>
+      </a>
+      <span class="retake-link" onclick="restart()">Retake the assessment</span>
+    </div>
+  </section>
+
+  <footer>
+    Built by <a href="https://olamidelatifat.com">Olamide Latifat Mohammed</a> · Educational tool, not a substitute for a formal NDPA compliance audit
+  </footer>
+
+</div>
+
+<script>
+const questions = [
+  {
+    text: "Do you have a designated Data Protection Officer, or someone formally responsible for data protection compliance?",
+    help: "NDPA 2023 requires data controllers/processors of major importance to appoint a DPO. Smaller businesses still need someone accountable, even if it's not a full-time role.",
+    category: "Governance & Accountability"
+  },
+  {
+    text: "Do you maintain a record of what personal data you collect, why, and where it's stored?",
+    help: "A Record of Processing Activities is the foundation the NDPC expects you to produce if asked. Most businesses collect data without ever mapping it.",
+    category: "Governance & Accountability"
+  },
+  {
+    text: "Have you filed your compliance audit return with the NDPC, if your business qualifies as a data controller or processor of major importance?",
+    help: "A specific, checkable filing obligation many businesses don't know exists until they're already non-compliant.",
+    category: "Governance & Accountability"
+  },
+  {
+    text: "Do you have a written privacy policy that's actually accessible to the people whose data you collect?",
+    help: "Not a generic template pasted into a footer. It needs to reflect what you actually do with data.",
+    category: "Data Subject Rights"
+  },
+  {
+    text: "Can you show that you obtained clear, informed consent before collecting personal data, and do you keep a record of that consent?",
+    help: "\"We assume they agreed\" doesn't hold up. NDPA requires demonstrable consent, not implied consent.",
+    category: "Data Subject Rights"
+  },
+  {
+    text: "Do you have a documented process for responding to someone who asks what data you hold on them, or asks you to delete it?",
+    help: "Data subjects have enforceable rights under NDPA. If a request came in today, would anyone know what to do with it?",
+    category: "Data Subject Rights"
+  },
+  {
+    text: "Do you have a data breach response plan, including who to notify and within what timeframe?",
+    help: "NDPA requires notifying the NDPC within 72 hours of a qualifying breach. Without a plan, that clock starts against you with zero preparation.",
+    category: "Breach & Vendor Readiness"
+  },
+  {
+    text: "For any high-risk data processing (large-scale, sensitive data, profiling), have you done a Data Protection Impact Assessment?",
+    help: "Applies more to fintech, lending, and health-adjacent businesses, but worth asking regardless of sector.",
+    category: "Breach & Vendor Readiness"
+  },
+  {
+    text: "If you share personal data with third parties (vendors, cloud providers, payment processors), do you have data processing agreements with them?",
+    help: "You're still responsible for what your vendors do with data you handed them. A verbal understanding isn't a contract.",
+    category: "Breach & Vendor Readiness"
+  },
+  {
+    text: "Do staff who handle personal data receive any training on data protection practices?",
+    help: "Most breaches trace back to human error, not sophisticated attacks. Untrained staff are the biggest gap most businesses don't budget for.",
+    category: "Training & Awareness"
+  }
+];
+
+const optionValues = [
+  { label: "Yes, fully in place", points: 10 },
+  { label: "Partially, or in progress", points: 5 },
+  { label: "No, or not sure", points: 0 }
+];
+
+let current = 0;
+let answers = new Array(questions.length).fill(null);
+
+function startAssessment() {
+  show('question-screen');
+  renderQuestion();
+}
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  document.getElementById('qCounter').textContent = `QUESTION ${current + 1} OF ${questions.length}`;
+  document.getElementById('qText').textContent = q.text;
+  document.getElementById('qHelp').textContent = q.help;
+  document.getElementById('progressFill').style.width = `${((current) / questions.length) * 100 + 10}%`;
+  document.getElementById('backBtn').style.visibility = current === 0 ? 'hidden' : 'visible';
+
+  const optsDiv = document.getElementById('qOptions');
+  optsDiv.innerHTML = '';
+  optionValues.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[current] === i ? ' selected' : '');
+    div.textContent = opt.label;
+    div.onclick = () => selectOption(i);
+    optsDiv.appendChild(div);
+  });
+}
+
+function selectOption(i) {
+  answers[current] = i;
+  renderQuestion();
+  setTimeout(() => {
+    if (current < questions.length - 1) {
+      current++;
+      renderQuestion();
+    } else {
+      showResults();
+    }
+  }, 220);
+}
+
+function goBack() {
+  if (current > 0) {
+    current--;
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  const total = answers.reduce((sum, i) => sum + optionValues[i].points, 0);
+  const pct = total; // out of 100
+
+  document.getElementById('scoreNum').textContent = total;
+  document.getElementById('bandSub').textContent = `${total}% compliance score`;
+
+  const circumference = 2 * Math.PI * 70;
+  const arc = document.getElementById('scoreArc');
+  arc.style.strokeDasharray = circumference;
+  arc.style.strokeDashoffset = circumference - (circumference * pct / 100);
+
+  let band, bandColor, interpretation;
+  if (total >= 80) {
+    band = "Compliance-Ready";
+    bandColor = "#3DDC84";
+    interpretation = "Your fundamentals are strong. What's left is fine-tuning specific gaps rather than building from scratch, worth a targeted review to close what remains before it becomes a liability.";
+  } else if (total >= 60) {
+    band = "Moderate Gaps";
+    bandColor = "#FFB020";
+    interpretation = "You've got real foundations in place, but specific gaps in your answers create genuine exposure. These are usually fixable in weeks, not months, if addressed deliberately.";
+  } else if (total >= 40) {
+    band = "Significant Exposure";
+    bandColor = "#FF8A3D";
+    interpretation = "Multiple core NDPA requirements appear to be missing. An audit, a complaint, or a breach would likely surface real problems. This is worth prioritizing, not filing away for later.";
+  } else {
+    band = "Critical Risk";
+    bandColor = "#FF4B2B";
+    interpretation = "There's minimal NDPA compliance infrastructure in place based on your answers. This creates real legal and financial exposure, and it's worth addressing before it becomes something you're dealing with reactively.";
+  }
+
+  document.getElementById('bandLabel').textContent = band;
+  document.getElementById('bandLabel').style.color = bandColor;
+  arc.setAttribute('stroke', bandColor);
+  document.getElementById('interpretation').textContent = interpretation;
+
+  // Category breakdown
+  const categories = {};
+  questions.forEach((q, i) => {
+    if (!categories[q.category]) categories[q.category] = { total: 0, max: 0 };
+    categories[q.category].total += optionValues[answers[i]].points;
+    categories[q.category].max += 10;
+  });
+
+  const catList = document.getElementById('catList');
+  catList.innerHTML = '';
+  Object.keys(categories).forEach(cat => {
+    const c = categories[cat];
+    const ratio = c.total / c.max;
+    let tagClass, tagText;
+    if (ratio >= 0.7) { tagClass = 'tag-strong'; tagText = 'Strong'; }
+    else if (ratio >= 0.4) { tagClass = 'tag-needs'; tagText = 'Needs work'; }
+    else { tagClass = 'tag-critical'; tagText = 'Critical'; }
+
+    const row = document.createElement('div');
+    row.className = 'cat-row';
+    row.innerHTML = `<span class="cat-name">${cat}</span><span class="cat-tag ${tagClass}">${tagText}</span>`;
+    catList.appendChild(row);
+  });
+
+  show('results');
+}
+
+function restart() {
+  current = 0;
+  answers = new Array(questions.length).fill(null);
+  show('landing');
+}
+</script>
+
+</body>
+</html>
